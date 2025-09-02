@@ -10,9 +10,9 @@ app = QApplication([])
 def janela():
     return ConversorWordPDF()
 
-# ---------------------------
+# --------------------------
 # TESTES POSITIVOS (10)
-# ---------------------------
+# --------------------------
 
 def test_titulo_janela(janela):
     assert janela.windowTitle() == "Conversor Word → PDF"
