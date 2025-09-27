@@ -9,11 +9,17 @@ def env(name, default=None, required=False):
     return val
 
 def main():
+
     repo = env("GITHUB_REPOSITORY", "unknown")
+
     run_id = env("GITHUB_RUN_ID", "unknown")
+
     sha = env("GITHUB_SHA", "unknown")[:7]
+
     test_status = env("TEST_STATUS", "unknown")
+
     build_status = env("BUILD_STATUS", "unknown")
+
     to_email = env("NOTIFY_EMAIL", required=True)
 
     run_url = f"https://github.com/{repo}/actions/runs/{run_id}" if run_id != "unknown" else "(desconhecido)"
