@@ -1,139 +1,126 @@
-pip# Conversor Word → PDF
+# Conversor de Arquivos → PDF  
 
-## 📌 Descrição
-Aplicação desenvolvida em **Python + PySide6** que permite selecionar um arquivo Word (`.docx`) e convertê-lo automaticamente para PDF utilizando a biblioteca **docx2pdf**.  
+## 📌 Descrição  
+Aplicação desenvolvida em **Python + PySide6** que permite selecionar arquivos nos formatos:  
+
+- 📝 **Word (`.docx`)** → PDF  
+- 📊 **CSV (`.csv`)** → PDF  
+- 🎤 **PowerPoint (`.pptx`)** → PDF  
+
+A aplicação possui:  
+- **Interface gráfica moderna (dark mode)**  
+- **Linha de comando (CLI)**  
+- **Suíte de testes com +20 cenários (incluindo mocks)**  
+- **Estrutura simples para manutenção e evolução**  
 
 ---
 
-## ⚙️ Instalação e Requisitos
+## ⚙️ Instalação e Requisitos  
 
-### Pré-requisitos
-- Python 3.10+ (recomendado 3.11 ou superior)
-- Ambiente virtual configurado (venv)
+### Pré-requisitos  
+- Python 3.10+ (recomendado 3.11 ou superior)  
+- Ambiente virtual configurado (`venv`)  
 
-### Dependências
-As principais bibliotecas utilizadas no projeto são:
-- **PySide6** → criação da interface gráfica.
-- **docx2pdf** → conversão de arquivos Word em PDF.
-- **pytest** → execução dos testes unitários.
+### Dependências  
+As principais bibliotecas utilizadas no projeto são:  
+- **PySide6** → criação da interface gráfica.  
+- **docx2pdf** → conversão de arquivos Word em PDF.  
+- **pandas** → leitura de arquivos CSV.  
+- **python-pptx** → leitura de apresentações PowerPoint.  
+- **reportlab** → geração de PDFs a partir de CSV e PPTX.  
+- **pytest / pytest-qt** → execução da suíte de testes.  
 
-### Instalação
-Clone o repositório e instale as dependências:
+### Instalação  
+Clone o repositório e instale as dependências:  
 
 ```bash
-git clone https://github.com/seu-usuario/seu-repositorio.git
-cd seu-repositorio
+git clone https://github.com/DonattoPieve/Project_C214.git
+cd Project_C214
 
 # Crie e ative o ambiente virtual (Windows)
-
-## Table of Contents
-
-<details>
-
-   <summary>Contents</summary>
-
-1. [📌 Descrição](#-descrio)
-1. [⚙️ Instalação e Requisitos](#-instalao-e-requisitos)
-   1. [Pré-requisitos](#pr-requisitos)
-   1. [Dependências](#dependncias)
-   1. [Instalação](#instalao)
-1. [🧪 Testes Unitários](#-testes-unitrios)
-   1. [Estrutura da suíte](#estrutura-da-sute)
-   1. [Execução dos testes](#execuo-dos-testes)
-1. [🚨 Regressão simulada](#-regresso-simulada)
-   1. [Resultado da execução dos testes:](#resultado-da-execuo-dos-testes)
-1. [✅ Correção](#-correo)
-1. [📖 Conclusão](#-concluso)
-
-</details>
 python -m venv venv
 venv\Scripts\activate
+
+# No Linux/Mac
+# source venv/bin/activate
 
 # Instale as dependências
 pip install -r requirements.txt
 ```
 
-Arquivo `requirements.txt` sugerido:
+Arquivo `requirements.txt` sugerido:  
 
 ```
 PySide6
 docx2pdf
+pandas
+python-pptx
+reportlab
 pytest
 pytest-qt
 ```
 
 ---
 
-## 🧪 Testes Unitários
+## ▶️ Como usar  
 
-### Estrutura da suíte
-Foi criada uma suíte de **20 testes unitários** usando **pytest**, divididos em:  
+### Interface gráfica  
+```bash
+python -m word2pdf.gui
+```
+Ou, se instalado via `pip`:  
+```bash
+word2pdf-gui
+```
 
-- ✅ **10 casos positivos**: validam o comportamento esperado da aplicação em situações normais (título da janela, botões criados, campo de texto aceitando valores corretos, extensão `.docx` válida, etc.).  
-- ❌ **10 casos negativos**: testam entradas inválidas ou limites, garantindo que o sistema lida corretamente com erros (campo vazio, apenas espaços, extensões erradas como `.txt`, nomes inválidos, caminhos muito longos, apenas símbolos, etc.).  
-
-A suíte cobre tanto **funcionalidades da interface** quanto **tratamento de entradas** no campo de seleção de arquivos.
+### Linha de comando (CLI)  
+```bash
+word2pdf caminho/arquivo.docx
+word2pdf caminho/arquivo.csv
+word2pdf caminho/arquivo.pptx --outdir saida/
+```
 
 ---
 
-### Execução dos testes
-Para rodar os testes, ative o ambiente virtual e utilize:
+## 🧪 Testes Unitários  
 
+### Estrutura da suíte  
+Foi criada uma suíte de **+20 testes** usando **pytest**, divididos em:  
+
+- ✅ **Casos positivos**: conversão correta de arquivos, botões da GUI, parsing de argumentos no CLI.  
+- ❌ **Casos negativos**: caminhos inexistentes, extensões inválidas, campo vazio, etc.  
+- 🎭 **Mocks**: 2 testes utilizam `monkeypatch` para simular falhas ou interceptar chamadas externas.  
+
+### Execução dos testes  
 ```bash
 pytest -v
 ```
 
-ou
-
+Com cobertura:  
 ```bash
-python -m pytest -v
-```
-
-Exemplo de saída esperada:
-
-```
-collected 20 items
-
-tests/test_conversor.py::test_titulo_janela PASSED
-tests/test_conversor.py::test_label_texto PASSED
-tests/test_conversor.py::test_botao_converter_existe PASSED
-...
-tests/test_conversor.py::test_input_nome_vazio_com_extensao PASSED
-
-====================== 20 passed in 2.31s ======================
+pytest --cov=word2pdf --cov-report=html
 ```
 
 ---
 
-## 🚨 Regressão simulada
+## ✨ Recursos extras  
 
-Para validar a suíte, foi solicitado a um colega a criação de um **Pull Request** que introduziu uma regressão:  
-- O botão **"Converter para PDF"** foi renomeado incorretamente para `"Converter"`.  
-
-### Resultado da execução dos testes:
-
-```
->       assert janela.btn_convert.text() == "Converter para PDF"
-E       AssertionError: assert 'Converter' == 'Converter para PDF'
-E         
-E         - Converter para PDF
-E         + Converter
-```
-
-A suíte identificou a falha e bloqueou a integração do código quebrado.
+- 🎨 **Dark mode** aplicado globalmente.  
+- 🔗 **Assinatura com link clicável** no rodapé da janela:  
+  [Desenvolvido por Donatto Pieve — GitHub](https://github.com/DonattoPieve/Project_C214)  
 
 ---
 
-## ✅ Correção
-O erro foi corrigido restaurando o texto original do botão para `"Converter para PDF"`.  
-Após o ajuste, todos os **20 testes passaram novamente**, garantindo que a regressão foi eliminada.
+## 👨‍💻 Desenvolvedores  
+
+| Desenvolvido por | GitHub |
+|------------------|--------|
+| **Donatto Pieve** | [github.com/DonattoPieve](https://github.com/DonattoPieve) |
 
 ---
 
-## 📖 Conclusão
-A suíte de testes:
-- Garante o funcionamento da aplicação em cenários normais.  
-- Detecta erros e regressões de forma rápida.  
-- Facilita a manutenção e evolução do código.  
-
----
+## 📖 Conclusão  
+A suíte de testes e a organização do projeto garantem:  
+- Qualidade e manutenção da aplicação.  
+- Detecção de regressões rapidamente.  
+- Facilidade para expandir novas funções (ex: suporte a Excel ou imagens).  
