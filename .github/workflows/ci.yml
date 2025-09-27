@@ -23,6 +23,8 @@ jobs:
         run: bash Scripts/setup.sh
 
       - name: Rodar pytest (cobertura)
+        env:
+          QT_QPA_PLATFORM: offscreen   # 🔑 força o Qt a rodar sem GUI
         run: |
           pytest -q --maxfail=1 --disable-warnings \
             --cov=src --cov-report=term-missing \
@@ -88,4 +90,3 @@ jobs:
           TEST_STATUS: ${{ needs.tests.result }}
           BUILD_STATUS: ${{ needs.build.result }}
         run: python Scripts/send_email.py
-
