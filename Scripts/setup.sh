@@ -5,7 +5,6 @@ echo "[setup] Upgrading pip"
 python -m pip install --upgrade pip
 
 echo "[setup] Instalando bibliotecas gráficas mínimas para PySide6"
-sudo apt-get update -y
 sudo apt-get install -y libegl1 libgl1
 
 echo "[setup] Instalando dependências do projeto"

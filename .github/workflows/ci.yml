@@ -19,12 +19,20 @@ jobs:
         with:
           python-version: '3.11'
 
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
+
       - name: Instalar tudo via script
         run: bash Scripts/setup.sh
 
       - name: Rodar pytest (cobertura)
         env:
-          QT_QPA_PLATFORM: offscreen   # 🔑 Qt roda sem GUI
+          QT_QPA_PLATFORM: offscreen
         run: |
           pytest -q --maxfail=1 --disable-warnings \
             --cov=src --cov-report=term-missing \
@@ -51,6 +59,14 @@ jobs:
       - uses: actions/setup-python@v5
         with:
           python-version: '3.11'
+
+      - name: Cache pip
+        uses: actions/cache@v4
+        with:
+          path: ~/.cache/pip
+          key: ${{ runner.os }}-pip-${{ hashFiles('requirements.txt') }}
+          restore-keys: |
+            ${{ runner.os }}-pip-
 
       - name: Instalar tudo via script
         run: bash Scripts/setup.sh
