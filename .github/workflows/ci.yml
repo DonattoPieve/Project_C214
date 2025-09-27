@@ -20,7 +20,7 @@ jobs:
           python-version: '3.11'
 
       - name: Instalar tudo via script
-        run: bash scripts/setup.sh
+        run: bash Scripts/setup.sh
 
       - name: Rodar pytest (cobertura)
         run: |
@@ -51,7 +51,7 @@ jobs:
           python-version: '3.11'
 
       - name: Instalar tudo via script
-        run: bash scripts/setup.sh
+        run: bash Scripts/setup.sh
 
       - name: Empacotar (sdist e wheel)
         run: python -m build
@@ -87,4 +87,5 @@ jobs:
           SMTP_USE_TLS: ${{ secrets.SMTP_USE_TLS }}
           TEST_STATUS: ${{ needs.tests.result }}
           BUILD_STATUS: ${{ needs.build.result }}
-        run: python scripts/send_email.py
+        run: python Scripts/send_email.py
+
