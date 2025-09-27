@@ -9,6 +9,9 @@ jobs:
   tests:
     name: Testes
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
 
@@ -35,9 +38,11 @@ jobs:
             coverage.xml
 
   build:
-    # Roda em paralelo com "tests"
     name: Build (empacotamento)
     runs-on: ubuntu-latest
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
 
@@ -60,7 +65,10 @@ jobs:
   notify:
     name: Notificação por e-mail
     runs-on: ubuntu-latest
-    needs: [tests, build]   # só notifica após terminar os dois
+    needs: [tests, build]
+    defaults:
+      run:
+        shell: bash
     steps:
       - uses: actions/checkout@v4
 
