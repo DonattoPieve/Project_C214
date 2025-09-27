@@ -1,0 +1,28 @@
+[build-system]
+requires = ["setuptools>=61.0"]
+build-backend = "setuptools.build_meta"
+
+[project]
+name = "pdfconverter"
+version = "1.0.0"
+description = "Conversor de arquivos (Word, CSV, PowerPoint) para PDF com GUI em PySide6"
+authors = [
+    { name = "Donatto Pieve" }
+]
+readme = "README.md"
+requires-python = ">=3.10"
+
+dependencies = [
+    "PySide6",
+    "docx2pdf",
+    "pandas",
+    "python-pptx",
+    "reportlab"
+]
+
+[project.optional-dependencies]
+dev = ["pytest", "pytest-qt", "pytest-cov"]
+
+[project.scripts]
+pdfconverter = "file_converter.cli:main"
+pdfconverter-gui = "file_converter.gui:main"

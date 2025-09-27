@@ -2,26 +2,70 @@ import sys
 from pathlib import Path
 from PySide6.QtWidgets import (
     QApplication, QMainWindow, QWidget, QVBoxLayout, QHBoxLayout,
-    QPushButton, QLineEdit, QFileDialog, QMessageBox, QLabel
+    QPushButton, QLineEdit, QFileDialog, QMessageBox, QLabel,
+    QDialog, QDialogButtonBox, QStyle
 )
 from PySide6.QtGui import QIcon, QFont, QAction, QColor, QPalette
 from PySide6.QtCore import Qt
 
 from .core import convert_docx_to_pdf, convert_csv_to_pdf, convert_pptx_to_pdf
+from . import __version__   # <<< importa a versão centralizada no __init__.py
+
+
+class SobreDialog(QDialog):
+    def __init__(self, parent=None):
+        super().__init__(parent)
+        self.setWindowTitle("Sobre")
+        self.setFixedSize(420, 230)
+
+        layout = QVBoxLayout(self)
+
+        # Ícone de informação (padrão do sistema)
+        icon_label = QLabel()
+        icon = self.style().standardIcon(QStyle.SP_MessageBoxInformation)
+        icon_label.setPixmap(icon.pixmap(48, 48))
+        icon_label.setAlignment(Qt.AlignCenter)
+        layout.addWidget(icon_label)
+
+        # Título + versão
+        title = QLabel(
+        f"📄 Conversor de Arquivos → PDF<br>"
+        f"<span style='font-size:9pt; color:gray;'>Versão {__version__}</span>"
+        )
+        title.setFont(QFont("Segoe UI", 12, QFont.Bold))
+        title.setAlignment(Qt.AlignCenter)
+        layout.addWidget(title)
+
+        # Autor
+        autor = QLabel("🔧 Desenvolvido por <b>Donatto Pieve</b>")
+        autor.setAlignment(Qt.AlignCenter)
+        layout.addWidget(autor)
+
+        # Link clicável
+        link = QLabel(
+            '<a href="https://github.com/DonattoPieve">'
+            '🌐 github.com/DonattoPieve</a>'
+        )
+        link.setAlignment(Qt.AlignCenter)
+        link.setOpenExternalLinks(True)
+        layout.addWidget(link)
+
+        # Botão fechar
+        botoes = QDialogButtonBox(QDialogButtonBox.Ok)
+        botoes.accepted.connect(self.accept)
+        layout.addWidget(botoes)
 
 
 class ConversorWindow(QMainWindow):
     def __init__(self):
         super().__init__()
         self.setWindowTitle("Conversor de Arquivos → PDF")
-        self.setFixedSize(600, 340)
+        self.setFixedSize(600, 320)
         self.setWindowIcon(QIcon.fromTheme("document-save"))
 
-        # Fonte padrão
         font = QFont("Segoe UI", 10)
         self.setFont(font)
 
-        # Central widget
         central = QWidget(self)
         layout = QVBoxLayout(central)
         layout.setSpacing(15)
@@ -65,16 +109,6 @@ class ConversorWindow(QMainWindow):
             """)
             layout.addWidget(btn)
 
-        # Label com autoria + link para GitHub
-        link = QLabel(
-            '<a href="https://github.com/DonattoPieve">'
-            '🔧 Desenvolvido por <b>Donatto Pieve</b>  </a>'
-        )
-        link.setAlignment(Qt.AlignCenter)
-        link.setOpenExternalLinks(True)  # permite clicar
-        link.setStyleSheet("color: #64B5F6; font-size: 9pt; font-style: italic; margin-top: 15px;")
-        layout.addWidget(link)
-
         self.setCentralWidget(central)
 
         # Conectar ações
@@ -88,16 +122,26 @@ class ConversorWindow(QMainWindow):
 
     def _create_menu(self):
         menu = self.menuBar()
-        file_menu = menu.addMenu("Arquivo")
 
+        # Menu Arquivo
+        file_menu = menu.addMenu("Arquivo")
         abrir = QAction("Abrir arquivo...", self)
         abrir.triggered.connect(self._selecionar_arquivo)
         sair = QAction("Sair", self)
         sair.triggered.connect(self.close)
-
         file_menu.addAction(abrir)
         file_menu.addSeparator()
         file_menu.addAction(sair)
+
+        # Menu Ajuda
+        ajuda_menu = menu.addMenu("Ajuda")
+        sobre = QAction("Sobre", self)
+        sobre.triggered.connect(self._mostrar_sobre)
+        ajuda_menu.addAction(sobre)
+
+    def _mostrar_sobre(self):
+        dialog = SobreDialog(self)
+        dialog.exec()
 
     def _selecionar_arquivo(self):
         path, _ = QFileDialog.getOpenFileName(
@@ -120,7 +164,6 @@ class ConversorWindow(QMainWindow):
 
 
 def aplicar_dark_mode(app: QApplication):
-    """Aplica tema escuro global no Qt."""
     dark_palette = QPalette()
     dark_palette.setColor(QPalette.Window, QColor(53, 53, 53))
     dark_palette.setColor(QPalette.WindowText, Qt.white)

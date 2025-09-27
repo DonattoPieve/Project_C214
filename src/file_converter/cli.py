@@ -1,5 +1,5 @@
 import pytest
-from word2pdf import cli
+from file_converter import cli
 
 def test_cli_parse_args_docx():
     args = cli.parse_args(["input.docx", "--outdir", "saida"])
