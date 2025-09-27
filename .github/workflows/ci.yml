@@ -30,11 +30,9 @@ jobs:
       - name: Instalar tudo via script
         run: bash Scripts/setup.sh
 
-      - name: Rodar pytest (cobertura)
-        env:
-          QT_QPA_PLATFORM: offscreen
+      - name: Rodar pytest (cobertura, sem GUI)
         run: |
-          pytest -q --maxfail=1 --disable-warnings \
+          pytest -q -m "not gui" --maxfail=1 --disable-warnings \
             --cov=src --cov-report=term-missing \
             --cov-report=xml --cov-report=html
 

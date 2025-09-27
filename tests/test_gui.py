@@ -8,14 +8,16 @@ def app(qtbot):
     return QApplication.instance() or QApplication([])
 
 
-def test_gui_widgets_exist(app, qtbot):
+@pytest.mark.gui
+def test_gui_widgets_exist(qtbot):
     w = ConversorWindow()
     qtbot.addWidget(w)
     assert w.input_path is not None
     assert w.btn_select.text() == "📂 Procurar"
 
 
-def test_gui_no_path_shows_error(app, qtbot):
+@pytest.mark.gui
+def test_gui_no_path_shows_error(qtbot):
     w = ConversorWindow()
     qtbot.addWidget(w)
     w.input_path.setText("")
@@ -23,14 +25,16 @@ def test_gui_no_path_shows_error(app, qtbot):
         w.btn_word.click()
 
 
+@pytest.mark.gui
 def test_gui_title(app, qtbot):
     w = ConversorWindow()
     qtbot.addWidget(w)
     assert "Conversor" in w.windowTitle()
 
+
+@pytest.mark.gui
 def test_gui_window_title(app, qtbot):
     """Garante que a janela principal tem título esperado."""
-    from file_converter.gui import ConversorWindow
     w = ConversorWindow()
     qtbot.addWidget(w)
     assert "Conversor" in w.windowTitle()
