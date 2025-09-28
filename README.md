@@ -1,5 +1,7 @@
 # Conversor de Arquivos → PDF  
 
+![CI/CD](https://github.com/DonattoPieve/Project_C214/actions/workflows/ci.yml/badge.svg)
+
 ## 📌 Descrição  
 Aplicação desenvolvida em **Python + PySide6** que permite selecionar arquivos nos formatos:  
 
